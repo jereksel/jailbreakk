@@ -1,0 +1,32 @@
+<idea-plugin>
+    <id>com.jereksel.jailbreakk</id>
+    <name>Jailbreakk</name>
+    <version>0.0.1</version>
+    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="141"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    uncomment to enable plugin in all products
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <kotlinIndicesHelperExtension implementation="com.jereksel.jailbreakk.KotlinIndicesHelperExtensionAdapter" />
+        <packageFragmentProviderExtension implementation="com.jereksel.jailbreakk.MyPackageFragmentProviderExtension" />
+        <expressionCodegenExtension implementation="com.jereksel.jailbreakk.MyExpressionCodegenExtension" />
+    </extensions>
+
+</idea-plugin>
