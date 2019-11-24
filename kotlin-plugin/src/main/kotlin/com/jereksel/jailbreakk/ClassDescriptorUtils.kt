@@ -16,7 +16,8 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
     val descriptors = unsubstitutedMemberScope.getContributedDescriptors { true }
 
     return descriptors
-            .filterIsInstance<CallableMemberDescriptor>()
+            .filter { (it is JavaCallableMemberDescriptor) or (it is SimpleFunctionDescriptor) }
+            .map { it as CallableMemberDescriptor }
             .filterNot { it.visibility.isPublicAPI }
             .map { descriptor ->
 
