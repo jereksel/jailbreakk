@@ -40,13 +40,22 @@ class AutocompleteTest : LightJavaCodeInsightFixtureTestCase() {
         }
     }
 
-    fun testCompletion() {
-        myFixture.configureByFiles("SecretClass.java");
-        myFixture.configureByFiles("SecretClass.kt");
-        myFixture.complete(CompletionType.BASIC, 1);
+    fun testJavaPrivateMethod() {
+        myFixture.configureByFiles("SecretClass.java")
+        myFixture.configureByFiles("SecretMain.kt")
+        myFixture.complete(CompletionType.BASIC, 1)
         val strings = myFixture.lookupElementStrings ?: emptyList()
         strings shouldBe listOf("adder")
         ((myFixture.lookupElements!!.first()).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
+    }
+
+    fun testKotlinPrivateMethod() {
+        myFixture.configureByFiles("SecretClass.kt")
+        myFixture.configureByFiles("SecretMain.kt")
+        myFixture.complete(CompletionType.BASIC, 1)
+        val strings = myFixture.lookupElementStrings ?: emptyList()
+        strings shouldBe listOf("equals", "hashCode", "toString", "adder")
+        ((myFixture.lookupElements!!.last()).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
     }
 
 }

@@ -28,7 +28,7 @@ class MyKotlinIndicesHelperExtension {
     }
 
     // https://github.com/JetBrains/kotlin/blob/e89aabb/plugins/kotlin-serialization/kotlin-serialization-compiler/src/org/jetbrains/kotlinx/serialization/compiler/resolve/KSerializationUtil.kt#L97
-    val KotlinType?.toClassDescriptor: ClassDescriptor?
+    private val KotlinType?.toClassDescriptor: ClassDescriptor?
         @JvmName("toClassDescriptor")
         get() = this?.constructor?.declarationDescriptor?.let { descriptor ->
             when(descriptor) {

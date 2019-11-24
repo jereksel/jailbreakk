@@ -7,18 +7,14 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import org.joor.Reflect.on
 
-class JavaPrivateMethodTest : StringSpec({
+class KotlinPrivateMethodTest : StringSpec({
 
     "Should invoke private method" {
 
-        val secretClass = SourceFile.java("SecretClass.java", """
-            
-            public class SecretClass {
-                private String adder(String a, String b, String c) {
-                    return a + b + c;
-                }
+        val secretClass = SourceFile.kotlin("SecretClass.kt", """
+            class SecretClass {
+                private fun adder(a: String, b: String, c: String): String = a + b + c
             }
-            
         """)
 
         val kotlinSource = SourceFile.kotlin("Main.kt", """

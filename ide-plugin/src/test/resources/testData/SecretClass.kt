@@ -1,4 +1,3 @@
-fun test(): String {
-    val secret = SecretClass()
-    secret.<caret>
+class SecretClass {
+    private fun adder(a: String, b: String, c: String): String = a + b + c
 }

@@ -1,7 +1,12 @@
 package com.jereksel.jailbreakk
 
+import com.jereksel.jailbreakk.Const.PACKAGE_PREFIX
 import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor.Kind.SYNTHESIZED
+import org.jetbrains.kotlin.descriptors.Modality.FINAL
+import org.jetbrains.kotlin.descriptors.Visibilities.PUBLIC
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.descriptors.annotations.Annotations.Companion.EMPTY
 import org.jetbrains.kotlin.load.java.descriptors.JavaCallableMemberDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -11,31 +16,29 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
     val descriptors = unsubstitutedMemberScope.getContributedDescriptors { true }
 
     return descriptors
-            .filterIsInstance<JavaCallableMemberDescriptor>()
+            .filterIsInstance<CallableMemberDescriptor>()
             .filterNot { it.visibility.isPublicAPI }
             .map { descriptor ->
 
-                val name = FqName("${Const.PACKAGE_PREFIX}.${fqNameSafe.asString()}")
+                val name = FqName("$PACKAGE_PREFIX.${fqNameSafe.asString()}")
 
-                val f = JailbreakkSimpleFunctionDescriptor(
+                JailbreakkSimpleFunctionDescriptor(
                         EmptyPackageFragmentDescriptorImpl(moduleDescriptor, name),
-                        Annotations.EMPTY,
+                        EMPTY,
                         descriptor.name,
-                        CallableMemberDescriptor.Kind.SYNTHESIZED,
+                        SYNTHESIZED,
                         descriptor.source,
-                        this.defaultType
-                )
-
-                f.initialize(
-                        thisAsReceiverParameter,
-                        null,
-                        descriptor.typeParameters,
-                        descriptor.valueParameters,
-                        descriptor.returnType,
-                        Modality.FINAL,
-                        Visibilities.PUBLIC
-                )
-
-                f
+                        defaultType
+                ).also {
+                    it.initialize(
+                            thisAsReceiverParameter,
+                            null,
+                            descriptor.typeParameters,
+                            descriptor.valueParameters,
+                            descriptor.returnType,
+                            FINAL,
+                            PUBLIC
+                    )
+                }
             }
 }
