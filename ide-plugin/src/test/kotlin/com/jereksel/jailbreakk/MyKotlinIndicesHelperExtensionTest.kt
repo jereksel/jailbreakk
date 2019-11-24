@@ -6,10 +6,10 @@ import com.intellij.openapi.roots.ContentEntry
 import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.pom.java.LanguageLevel
 import com.intellij.testFramework.LightProjectDescriptor
-import com.intellij.testFramework.PsiTestUtil
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import io.kotlintest.shouldBe
-import kotlin.script.experimental.jvm.util.classpathFromClassloader
+import org.jetbrains.kotlin.idea.core.completion.DeclarationLookupObject
+import org.jetbrains.kotlin.name.FqName
 
 class AutocompleteTest : LightJavaCodeInsightFixtureTestCase() {
 
@@ -46,5 +46,7 @@ class AutocompleteTest : LightJavaCodeInsightFixtureTestCase() {
         myFixture.complete(CompletionType.BASIC, 1);
         val strings = myFixture.lookupElementStrings ?: emptyList()
         strings shouldBe listOf("adder")
+        ((myFixture.lookupElements!!.first()).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
     }
+
 }

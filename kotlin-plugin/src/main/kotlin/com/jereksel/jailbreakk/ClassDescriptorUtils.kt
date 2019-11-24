@@ -14,10 +14,11 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
             .filterIsInstance<JavaCallableMemberDescriptor>()
             .filterNot { it.visibility.isPublicAPI }
             .map { descriptor ->
-                println(descriptor)
+
+                val name = FqName("${Const.PACKAGE_PREFIX}.${fqNameSafe.asString()}")
 
                 val f = JailbreakkSimpleFunctionDescriptor(
-                        EmptyPackageFragmentDescriptorImpl(moduleDescriptor, FqName("${Const.PACKAGE_PREFIX}.${fqNameSafe.asString()}.${descriptor.name.identifier}")),
+                        EmptyPackageFragmentDescriptorImpl(moduleDescriptor, name),
                         Annotations.EMPTY,
                         descriptor.name,
                         CallableMemberDescriptor.Kind.SYNTHESIZED,
