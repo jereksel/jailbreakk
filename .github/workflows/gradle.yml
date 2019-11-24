@@ -20,7 +20,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts')-${{ hashFiles('buildSrc/**/*.kt') }} }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}-${{ hashFiles('buildSrc/**/*.kt') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
 
@@ -28,7 +28,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ide-plugin/build/idea-sandbox
-        key: ${{ runner.os }}-intellij-${{ hashFiles('**/*.gradle.kts')-${{ hashFiles('buildSrc/**/*.kt') }} }}
+        key: ${{ runner.os }}-intellij-${{ hashFiles('**/*.gradle.kts') }}-${{ hashFiles('buildSrc/**/*.kt') }}
         restore-keys: |
           ${{ runner.os }}-intellij-
 
