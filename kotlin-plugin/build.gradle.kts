@@ -23,6 +23,7 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    maxParallelForks = Runtime.getRuntime().availableProcessors()
 }
 
 // the following code makes sure that our kotlin-plugin is compatible with the kotlin-compiler-embeddable package

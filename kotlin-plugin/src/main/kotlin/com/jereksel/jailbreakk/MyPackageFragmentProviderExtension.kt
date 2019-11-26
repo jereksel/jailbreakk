@@ -43,7 +43,7 @@ class MyPackageFragmentProviderExtension : PackageFragmentProviderExtension {
 
                 val fqNameWithoutPrefix = FqName.fromSegments(fqName.pathSegments().drop(1).map { it.asString() })
 
-                val clz = module.findClassAcrossModuleDependencies(ClassId(fqNameWithoutPrefix.parent(), fqNameWithoutPrefix.shortName())) ?: return emptyList()
+                val clz = module.findClassAcrossModuleDependencies(ClassId.topLevel(fqNameWithoutPrefix)) ?: return emptyList()
 
                 return listOf(
                         object: PackageFragmentDescriptorImpl(

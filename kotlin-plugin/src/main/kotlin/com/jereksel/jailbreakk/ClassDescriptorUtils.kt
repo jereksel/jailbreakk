@@ -5,7 +5,6 @@ import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor.Kind.SYNTHESIZED
 import org.jetbrains.kotlin.descriptors.Modality.FINAL
 import org.jetbrains.kotlin.descriptors.Visibilities.PUBLIC
-import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.annotations.Annotations.Companion.EMPTY
 import org.jetbrains.kotlin.load.java.descriptors.JavaCallableMemberDescriptor
 import org.jetbrains.kotlin.name.FqName
@@ -34,7 +33,7 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
                     it.initialize(
                             thisAsReceiverParameter,
                             null,
-                            descriptor.typeParameters,
+                            declaredTypeParameters + descriptor.typeParameters,
                             descriptor.valueParameters,
                             descriptor.returnType,
                             FINAL,

@@ -1,54 +1,44 @@
 package com.jereksel.jailbreakk
 
-import com.tschuchort.compiletesting.KotlinCompilation
-import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.OK
 import com.tschuchort.compiletesting.SourceFile
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import org.joor.Reflect.on
 
-class JavaPrivateMethodTest : StringSpec({
+class JavaPrivateMethodTest : AbstractCompilerTest() {
 
-    "Should invoke private method" {
+    init {
 
-        val secretClass = SourceFile.java("SecretClass.java", """
+        "Should invoke private method" {
+
+            val secretClass = SourceFile.java("SecretClass.java", """
             
-            public class SecretClass {
-                private String adder(String a, String b, String c) {
-                    return a + b + c;
+                public class SecretClass {
+                    private String adder(String a, String b, String c) {
+                        return a + b + c;
+                    }
                 }
-            }
             
         """)
 
-        val kotlinSource = SourceFile.kotlin("Main.kt", """
-            import jb.SecretClass.adder
+            val kotlinSource = SourceFile.kotlin("Main.kt", """
+                import jb.SecretClass.adder
             
-            fun test(): String {
-                val secret = SecretClass()
-                val a = "a"
-                val b = "b"
-                return secret.adder(a, b, "c")
-            }
+                fun test(): String {
+                    val secret = SecretClass()
+                    val a = "a"
+                    val b = "b"
+                    val result = secret.adder(a, b, "c")
+                    if (result == "abc") {
+                        return "OK"
+                    } else {
+                        error("")
+                    }
+                }
         
-    """)
+            """)
 
-        val result = KotlinCompilation().apply {
-            sources = listOf(kotlinSource, secretClass)
+            testCompilation(secretClass, kotlinSource)
 
-            // pass your own instance of a compiler plugin
-            compilerPlugins = listOf(MyComponentRegistrar())
-
-            inheritClassPath = true
-            messageOutputStream = System.out // see diagnostics in real time
-        }.compile()
-
-        result.exitCode shouldBe OK
-
-        on("MainKt", result.classLoader)
-                .call("test")
-                .get<String>() shouldBe "abc"
+        }
 
     }
 
-})
+}
