@@ -78,7 +78,7 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
             it.invokevirtual("java/lang/Class", "getDeclaredMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false)
 
             it.dup()
-            it.aconst(1)
+            it.iconst(1)
             it.invokevirtual("java/lang/reflect/Method", "setAccessible", "(Z)V", false)
 
             c.codegen.gen(resolvedCall.getReceiverExpression()!!).put(it)
