@@ -29,13 +29,17 @@ class PrimitiveTest : AbstractCompilerTest() {
                         return "FAIL"
                     }
                     
-//                    val b = clz.getByte(1)
-//                    val c = clz.getChar(2.toChar())
-//                    val s = clz.getShort(3)
-//                    val i = clz.getInt(4)
-//                    val l = clz.getLong(5L)
-//                    val float = clz.getFloat(6.0F)
-//                    val double = clz.getDouble(7.0)
+                    val b = clz.getByte(1)
+                    val c = clz.getChar(2.toChar())
+                    val s = clz.getShort(3)
+                    val i = clz.getInt(4)
+                    val l = clz.getLong(5L)
+                    val f = clz.getFloat(6.0F)
+                    val d = clz.getDouble(7.0)
+
+                    if (b.toInt() + c.toInt() + s.toInt() + i + l + f + d != 28.0) {
+                        return "FAIL"
+                    }
                     
                     return "OK"
                 

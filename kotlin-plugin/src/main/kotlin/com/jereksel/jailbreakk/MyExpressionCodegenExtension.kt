@@ -3,6 +3,7 @@ package com.jereksel.jailbreakk
 import org.jetbrains.kotlin.codegen.OperationStackValue
 import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.asmType
+import org.jetbrains.kotlin.codegen.coroutines.invokeDoResumeWithUnit
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
 import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
@@ -10,30 +11,32 @@ import org.jetbrains.kotlin.resolve.calls.inference.returnTypeOrNothing
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.org.objectweb.asm.Type
+import org.jetbrains.org.objectweb.asm.Type.*
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
 class MyExpressionCodegenExtension : ExpressionCodegenExtension {
 
-    val CLASS_TYPE = Type.getType(Class::class.java)
-
     companion object {
-        val BOOLEAN_OBJECT_TYPE = Type.getType(java.lang.Boolean::class.java)!!
-        val BYTE_OBJECT_TYPE = Type.getType(java.lang.Byte::class.java)!!
-        val CHAR_OBJECT_TYPE = Type.getType(java.lang.Character::class.java)!!
-        val DOUBLE_OBJECT_TYPE = Type.getType(java.lang.Double::class.java)!!
-        val FLOAT_OBJECT_TYPE = Type.getType(java.lang.Float::class.java)!!
-        val INT_OBJECT_TYPE = Type.getType(java.lang.Integer::class.java)!!
-        val LONG_OBJECT_TYPE = Type.getType(java.lang.Long::class.java)!!
-        val SHORT_OBJECT_TYPE = Type.getType(java.lang.Short::class.java)!!
+
+        val CLASS_TYPE = getType(Class::class.java)!!
+
+        val BOOLEAN_OBJECT_TYPE = getType(java.lang.Boolean::class.java)!!
+        val BYTE_OBJECT_TYPE = getType(java.lang.Byte::class.java)!!
+        val CHAR_OBJECT_TYPE = getType(java.lang.Character::class.java)!!
+        val DOUBLE_OBJECT_TYPE = getType(java.lang.Double::class.java)!!
+        val FLOAT_OBJECT_TYPE = getType(java.lang.Float::class.java)!!
+        val INT_OBJECT_TYPE = getType(java.lang.Integer::class.java)!!
+        val LONG_OBJECT_TYPE = getType(java.lang.Long::class.java)!!
+        val SHORT_OBJECT_TYPE = getType(java.lang.Short::class.java)!!
 
         val primitiveToWrapper: Map<Type, Type> = mapOf(
-                Type.BOOLEAN_TYPE to BOOLEAN_OBJECT_TYPE,
-                Type.BYTE_TYPE to BYTE_OBJECT_TYPE,
-                Type.CHAR_TYPE to CHAR_OBJECT_TYPE,
-                Type.DOUBLE_TYPE to DOUBLE_OBJECT_TYPE,
-                Type.FLOAT_TYPE to FLOAT_OBJECT_TYPE,
-                Type.INT_TYPE to INT_OBJECT_TYPE,
-                Type.LONG_TYPE to LONG_OBJECT_TYPE,
+                BOOLEAN_TYPE to BOOLEAN_OBJECT_TYPE,
+                BYTE_TYPE to BYTE_OBJECT_TYPE,
+                CHAR_TYPE to CHAR_OBJECT_TYPE,
+                DOUBLE_TYPE to DOUBLE_OBJECT_TYPE,
+                FLOAT_TYPE to FLOAT_OBJECT_TYPE,
+                INT_TYPE to INT_OBJECT_TYPE,
+                LONG_TYPE to LONG_OBJECT_TYPE,
                 Type.SHORT_TYPE to SHORT_OBJECT_TYPE
         )
 
@@ -55,8 +58,8 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
                     c.codegen.gen(it.arguments.first().getArgumentExpression())!!
                 }
 
-        val objectType = Type.getType(java.lang.Object::class.java)
-        val classType = Type.getType(Class::class.java)
+        val objectType = getType(java.lang.Object::class.java)
+        val classType = getType(Class::class.java)
 
         return OperationStackValue(returnType.asmType(c.typeMapper), returnType) {
 
@@ -98,13 +101,14 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
     private fun InstructionAdapter.putType(kotlinType: KotlinType, typeMapper: KotlinTypeMapper) {
 
         when(val type = kotlinType.asmType(typeMapper)) {
-            Type.BOOLEAN_TYPE -> putPrimitiveType(Type.BOOLEAN_TYPE)
-            Type.BYTE_TYPE -> putPrimitiveType(Type.BYTE_TYPE)
-            Type.CHAR_TYPE -> putPrimitiveType(Type.CHAR_TYPE)
-            Type.INT_TYPE -> putPrimitiveType(Type.INT_TYPE)
-            Type.FLOAT_TYPE -> putPrimitiveType(Type.FLOAT_TYPE)
-            Type.DOUBLE_TYPE -> putPrimitiveType(Type.DOUBLE_TYPE)
-            Type.LONG_TYPE -> putPrimitiveType(Type.LONG_TYPE)
+            BOOLEAN_TYPE -> putPrimitiveType(BOOLEAN_TYPE)
+            BYTE_TYPE -> putPrimitiveType(BYTE_TYPE)
+            CHAR_TYPE -> putPrimitiveType(CHAR_TYPE)
+            SHORT_TYPE -> putPrimitiveType(SHORT_TYPE)
+            INT_TYPE -> putPrimitiveType(INT_TYPE)
+            FLOAT_TYPE -> putPrimitiveType(FLOAT_TYPE)
+            DOUBLE_TYPE -> putPrimitiveType(DOUBLE_TYPE)
+            LONG_TYPE -> putPrimitiveType(LONG_TYPE)
             else -> aconst(type)
         }
 
@@ -118,28 +122,59 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
 
         stackValue.put(this)
 
-        if (stackValue.type == Type.BOOLEAN_TYPE) {
-            invokestatic("java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", false)
+        when (stackValue.type) {
+            BOOLEAN_TYPE -> invokestatic(BOOLEAN_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(BOOLEAN_OBJECT_TYPE, BOOLEAN_TYPE), false)
+            CHAR_TYPE -> invokestatic(CHAR_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(CHAR_OBJECT_TYPE, CHAR_TYPE), false)
+            SHORT_TYPE -> invokestatic(SHORT_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(SHORT_OBJECT_TYPE, SHORT_TYPE), false)
+            INT_TYPE -> invokestatic(INT_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(INT_OBJECT_TYPE, INT_TYPE), false)
+            LONG_TYPE -> invokestatic(LONG_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(LONG_OBJECT_TYPE, LONG_TYPE), false)
+            BYTE_TYPE -> invokestatic(BYTE_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(BYTE_OBJECT_TYPE, BYTE_TYPE), false)
+            FLOAT_TYPE -> invokestatic(FLOAT_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(FLOAT_OBJECT_TYPE, FLOAT_TYPE), false)
+            DOUBLE_TYPE -> invokestatic(DOUBLE_OBJECT_TYPE.internalName, "valueOf", getMethodDescriptor(DOUBLE_OBJECT_TYPE, DOUBLE_TYPE), false)
         }
 
     }
 
     private fun InstructionAdapter.castObject(destType: KotlinType, typeMapper: KotlinTypeMapper) {
 
-        val type = destType.asmType(typeMapper)
-
-        if (type == Type.BOOLEAN_TYPE) {
-            checkcast(BOOLEAN_OBJECT_TYPE)
-            invokevirtual("java/lang/Boolean", "booleanValue", "()Z", false)
-        } else {
-            checkcast(type)
+        when (val type = destType.asmType(typeMapper)) {
+            BOOLEAN_TYPE -> {
+                checkcast(BOOLEAN_OBJECT_TYPE)
+                invokevirtual("java/lang/Boolean", "booleanValue", getMethodDescriptor(BOOLEAN_TYPE), false)
+            }
+            BYTE_TYPE -> {
+                checkcast(BYTE_OBJECT_TYPE)
+                invokevirtual("java/lang/Byte", "byteValue", getMethodDescriptor(BYTE_TYPE), false)
+            }
+            CHAR_TYPE -> {
+                checkcast(CHAR_OBJECT_TYPE)
+                invokevirtual("java/lang/Character", "charValue", getMethodDescriptor(CHAR_TYPE), false)
+            }
+            DOUBLE_TYPE -> {
+                checkcast(DOUBLE_OBJECT_TYPE)
+                invokevirtual("java/lang/Double", "doubleValue", getMethodDescriptor(DOUBLE_TYPE), false)
+            }
+            FLOAT_TYPE -> {
+                checkcast(FLOAT_OBJECT_TYPE)
+                invokevirtual("java/lang/Float", "floatValue", getMethodDescriptor(FLOAT_TYPE), false)
+            }
+            INT_TYPE -> {
+                checkcast(INT_OBJECT_TYPE)
+                invokevirtual("java/lang/Integer", "intValue", getMethodDescriptor(INT_TYPE), false)
+            }
+            LONG_TYPE -> {
+                checkcast(LONG_OBJECT_TYPE)
+                invokevirtual("java/lang/Long", "longValue", getMethodDescriptor(LONG_TYPE), false)
+            }
+            SHORT_TYPE -> {
+                checkcast(SHORT_OBJECT_TYPE)
+                invokevirtual("java/lang/Short", "shortValue", getMethodDescriptor(SHORT_TYPE), false)
+            }
+            else -> {
+                checkcast(type)
+            }
         }
 
-    }
-
-    fun a() {
-        val m = Class::class.java.getMethod("a")
-        m.invoke(null, true)
     }
 
 }
