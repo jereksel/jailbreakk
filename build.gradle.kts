@@ -5,7 +5,6 @@ buildscript {
     }
     dependencies {
         classpath(Deps.kotlinGradlePlugin)
-        classpath(Deps.mavenGradlePlugin)
         classpath(Deps.shadow)
     }
 }
