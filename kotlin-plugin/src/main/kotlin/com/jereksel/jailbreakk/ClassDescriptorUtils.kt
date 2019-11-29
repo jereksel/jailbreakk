@@ -7,16 +7,17 @@ import org.jetbrains.kotlin.descriptors.Modality.FINAL
 import org.jetbrains.kotlin.descriptors.Visibilities.PUBLIC
 import org.jetbrains.kotlin.descriptors.annotations.Annotations.Companion.EMPTY
 import org.jetbrains.kotlin.load.java.descriptors.JavaCallableMemberDescriptor
+import org.jetbrains.kotlin.load.java.descriptors.JavaMethodDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.descriptorUtil.isPublishedApi
 
 fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<CallableDescriptor> {
 
     val descriptors = unsubstitutedMemberScope.getContributedDescriptors { true }
 
-    return descriptors
-            .filter { (it is JavaCallableMemberDescriptor) or (it is SimpleFunctionDescriptor) }
-            .map { it as CallableMemberDescriptor }
+    val methods = descriptors
+            .filterIsInstance<FunctionDescriptor>()
             .filterNot { it.visibility.isPublicAPI }
             .map { descriptor ->
 
@@ -41,4 +42,11 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
                     )
                 }
             }
+
+    val fields = descriptors
+            .filterIsInstance<PropertyDescriptor>()
+            .filterNot { it.visibility.isPublicAPI }
+
+
+    return methods
 }
