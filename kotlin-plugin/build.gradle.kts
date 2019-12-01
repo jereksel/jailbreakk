@@ -7,6 +7,8 @@ plugins {
     id("org.gradle.maven-publish")
 }
 
+apply<KotlinSourcesPlugin>()
+
 dependencies {
     implementation(Deps.kotlinReflect)
 
