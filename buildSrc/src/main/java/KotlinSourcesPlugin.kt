@@ -1,21 +1,15 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.repositories
-import org.gradle.kotlin.dsl.the
-import org.zeroturnaround.zip.ZipUtil
 import java.io.File
-import java.io.FileOutputStream
-import java.net.URL
-
 
 class KotlinSourcesPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
 
         //Don't generate sources in CI
-        if (System.getenv("CI") != null) {
+        if (System.getenv("CI") != null || System.getenv("GITHUB_WORKFLOW") != null) {
             return
         }
 

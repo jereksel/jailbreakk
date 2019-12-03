@@ -38,8 +38,6 @@ abstract class ZipGenerator : DefaultTask() {
 
         unpackedDir.mkdir()
 
-        println(tempDir)
-
         ZipUtil.unpack(tempZip, unpackedDir) { name ->
             for (p in packages) {
                 val prefix = "kotlin-${version}/${p}/src/"
@@ -53,6 +51,5 @@ abstract class ZipGenerator : DefaultTask() {
         ZipUtil.pack(unpackedDir, file)
 
     }
-
 
 }

@@ -45,9 +45,9 @@ class AutocompleteTest : LightJavaCodeInsightFixtureTestCase() {
         myFixture.configureByFiles("SecretMain.kt")
         myFixture.complete(CompletionType.BASIC, 1)
         val strings = myFixture.lookupElementStrings ?: emptyList()
-        strings shouldBe listOf("adder", "myField_field")
-        ((myFixture.lookupElements!![0]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
-        ((myFixture.lookupElements!![1]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.myField_field")
+        strings shouldBe listOf("myField_field", "adder")
+        ((myFixture.lookupElements!![0]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.myField_field")
+        ((myFixture.lookupElements!![1]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
     }
 
     fun testKotlinPrivateMethod() {
@@ -55,9 +55,9 @@ class AutocompleteTest : LightJavaCodeInsightFixtureTestCase() {
         myFixture.configureByFiles("SecretMain.kt")
         myFixture.complete(CompletionType.BASIC, 1)
         val strings = myFixture.lookupElementStrings ?: emptyList()
-        strings shouldBe listOf("equals", "hashCode", "toString", "adder", "myField_field")
-        ((myFixture.lookupElements!![3]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
-        ((myFixture.lookupElements!![4]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.myField_field")
+        strings shouldBe listOf("equals", "hashCode", "toString", "myField_field", "adder")
+        ((myFixture.lookupElements!![3]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.myField_field")
+        ((myFixture.lookupElements!![4]).`object` as DeclarationLookupObject).importableFqName shouldBe FqName("jb.SecretClass.adder")
     }
 
 }
