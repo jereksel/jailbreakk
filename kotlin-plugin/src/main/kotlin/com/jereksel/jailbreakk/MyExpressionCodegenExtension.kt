@@ -48,7 +48,6 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
     }
 
     override fun applyProperty(receiver: StackValue, resolvedCall: ResolvedCall<*>, c: ExpressionCodegenExtension.Context): StackValue? {
-        println("PROPERTY")
         val candidateDescriptor = resolvedCall.candidateDescriptor
         if (candidateDescriptor !is JailbreakkPropertyDescriptor) {
             return super.applyProperty(receiver, resolvedCall, c)
@@ -57,8 +56,6 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
         val containingClass = candidateDescriptor.originalType.asmType(c.typeMapper)
         val fieldName = candidateDescriptor.originalName.toString()
         val fieldType = candidateDescriptor.type.asmType(c.typeMapper)
-
-        println(fieldType)
 
         return OperationStackValue(fieldType, candidateDescriptor.type) {
             it.aconst(containingClass)
@@ -71,9 +68,7 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
 
             c.codegen.gen(resolvedCall.getReceiverExpression()!!).put(it)
 
-            it.invokevirtual("java/lang/reflect/Field", "get", getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE), false)
-
-            it.checkcast(fieldType)
+            it.performGetField(candidateDescriptor.type, c.typeMapper)
 
         }
 
@@ -130,6 +125,23 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
 
             it.invokevirtual("java/lang/reflect/Method", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false)
             it.castObject(candidateDescriptor.returnTypeOrNothing, c.typeMapper)
+        }
+    }
+
+    private fun InstructionAdapter.performGetField(kotlinType: KotlinType, typeMapper: KotlinTypeMapper) {
+        when(val type = kotlinType.asmType(typeMapper)) {
+            BOOLEAN_TYPE -> invokevirtual("java/lang/reflect/Field", "getBoolean", getMethodDescriptor(BOOLEAN_TYPE, OBJECT_TYPE), false)
+            BYTE_TYPE -> invokevirtual("java/lang/reflect/Field", "getByte", getMethodDescriptor(BYTE_TYPE, OBJECT_TYPE), false)
+            CHAR_TYPE -> invokevirtual("java/lang/reflect/Field", "getChar", getMethodDescriptor(CHAR_TYPE, OBJECT_TYPE), false)
+            SHORT_TYPE -> invokevirtual("java/lang/reflect/Field", "getShort", getMethodDescriptor(SHORT_TYPE, OBJECT_TYPE), false)
+            INT_TYPE -> invokevirtual("java/lang/reflect/Field", "getInt", getMethodDescriptor(INT_TYPE, OBJECT_TYPE), false)
+            FLOAT_TYPE -> invokevirtual("java/lang/reflect/Field", "getFloat", getMethodDescriptor(FLOAT_TYPE, OBJECT_TYPE), false)
+            DOUBLE_TYPE -> invokevirtual("java/lang/reflect/Field", "getDouble", getMethodDescriptor(DOUBLE_TYPE, OBJECT_TYPE), false)
+            LONG_TYPE -> invokevirtual("java/lang/reflect/Field", "getLong", getMethodDescriptor(LONG_TYPE, OBJECT_TYPE), false)
+            else -> {
+                invokevirtual("java/lang/reflect/Field", "get", getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE), false)
+                checkcast(type)
+            }
         }
     }
 

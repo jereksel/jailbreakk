@@ -19,7 +19,8 @@ abstract class ZipGenerator : DefaultTask() {
             "compiler/frontend",
             "compiler/frontend.java",
             "compiler/util",
-            "core/descriptors"
+            "core/descriptors",
+            "core/descriptors.jvm"
     )
 
     @get:OutputFile

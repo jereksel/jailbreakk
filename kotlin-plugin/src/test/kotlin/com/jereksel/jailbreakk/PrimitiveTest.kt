@@ -6,7 +6,7 @@ class PrimitiveTest : AbstractCompilerTest() {
 
     init {
 
-        "Primitive types" {
+        "Primitive types in method should work" {
 
             val kotlinSource = SourceFile.kotlin("Main.kt", """
                 import jb.SecretClass.*
@@ -50,6 +50,52 @@ class PrimitiveTest : AbstractCompilerTest() {
             testCompilation(kotlinSource)
 
         }
+
+        "Primitive types in fields should work" {
+
+            val kotlinSource = SourceFile.kotlin("Main.kt", """
+                import jb.SecretClass.*
+
+                class SecretClass {
+                    private val boolean: Boolean = false
+                    private val byte: Byte = 1
+                    private val char: Char = 2.toChar()
+                    private val short: Short = 3
+                    private val int: Int = 4
+                    private val long: Long = 5L
+                    private val float: Float = 6.0F
+                    private val double: Double = 7.0
+                }
+                
+                fun test(): String {
+                    val clz = SecretClass()
+                    
+                    if (clz.boolean_field) {
+                        return "FAIL"
+                    }
+                    
+                    val b = clz.byte_field
+                    val c = clz.char_field
+                    val s = clz.short_field
+                    val i = clz.int_field
+                    val l = clz.long_field
+                    val f = clz.float_field
+                    val d = clz.double_field
+
+                    if (b.toInt() + c.toInt() + s.toInt() + i + l + f + d != 28.0) {
+                        return "FAIL"
+                    }
+                    
+                    return "OK"
+                
+                }
+            
+            """)
+
+            testCompilation(kotlinSource)
+
+        }
+
 
     }
 
