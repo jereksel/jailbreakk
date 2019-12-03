@@ -10,6 +10,7 @@ gradlePlugin {
         create("jailbreakk") {
             id = Build.group
             implementationClass = "com.jereksel.jailbreakk.MyGradlePlugin"
+            version = Build.version
         }
     }
 }

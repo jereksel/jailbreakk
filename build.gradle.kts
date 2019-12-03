@@ -15,4 +15,8 @@ allprojects {
         mavenCentral()
         jcenter()
     }
+
+    tasks.withType<Test> {
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+    }
 }
