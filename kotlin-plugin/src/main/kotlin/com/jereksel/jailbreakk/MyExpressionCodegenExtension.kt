@@ -3,22 +3,25 @@ package com.jereksel.jailbreakk
 import org.jetbrains.kotlin.codegen.OperationStackValue
 import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.asmType
-import org.jetbrains.kotlin.codegen.coroutines.invokeDoResumeWithUnit
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
 import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.inference.returnTypeOrNothing
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.jvm.AsmTypes.JAVA_STRING_TYPE
+import org.jetbrains.kotlin.resolve.jvm.AsmTypes.OBJECT_TYPE
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.Type.*
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
+import java.lang.reflect.Field
 
 class MyExpressionCodegenExtension : ExpressionCodegenExtension {
 
     companion object {
 
         val CLASS_TYPE = getType(Class::class.java)!!
+        val FIELD_TYPE = getType(Field::class.java)!!
 
         val BOOLEAN_OBJECT_TYPE = getType(java.lang.Boolean::class.java)!!
         val BYTE_OBJECT_TYPE = getType(java.lang.Byte::class.java)!!
@@ -29,7 +32,7 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
         val LONG_OBJECT_TYPE = getType(java.lang.Long::class.java)!!
         val SHORT_OBJECT_TYPE = getType(java.lang.Short::class.java)!!
 
-        val primitiveToWrapper: Map<Type, Type> = mapOf(
+        private val primitiveToWrapper: Map<Type, Type> = mapOf(
                 BOOLEAN_TYPE to BOOLEAN_OBJECT_TYPE,
                 BYTE_TYPE to BYTE_OBJECT_TYPE,
                 CHAR_TYPE to CHAR_OBJECT_TYPE,
@@ -37,10 +40,42 @@ class MyExpressionCodegenExtension : ExpressionCodegenExtension {
                 FLOAT_TYPE to FLOAT_OBJECT_TYPE,
                 INT_TYPE to INT_OBJECT_TYPE,
                 LONG_TYPE to LONG_OBJECT_TYPE,
-                Type.SHORT_TYPE to SHORT_OBJECT_TYPE
+                SHORT_TYPE to SHORT_OBJECT_TYPE
         )
 
         fun Type.toWrapper(): Type = primitiveToWrapper[this] ?: error("Type $this is not primitive type")
+
+    }
+
+    override fun applyProperty(receiver: StackValue, resolvedCall: ResolvedCall<*>, c: ExpressionCodegenExtension.Context): StackValue? {
+        println("PROPERTY")
+        val candidateDescriptor = resolvedCall.candidateDescriptor
+        if (candidateDescriptor !is JailbreakkPropertyDescriptor) {
+            return super.applyProperty(receiver, resolvedCall, c)
+        }
+
+        val containingClass = candidateDescriptor.originalType.asmType(c.typeMapper)
+        val fieldName = candidateDescriptor.originalName.toString()
+        val fieldType = candidateDescriptor.type.asmType(c.typeMapper)
+
+        println(fieldType)
+
+        return OperationStackValue(fieldType, candidateDescriptor.type) {
+            it.aconst(containingClass)
+            it.aconst(fieldName)
+            it.invokevirtual("java/lang/Class", "getDeclaredField", getMethodDescriptor(FIELD_TYPE, JAVA_STRING_TYPE), false)
+
+            it.dup()
+            it.iconst(1)
+            it.invokevirtual("java/lang/reflect/Field", "setAccessible", "(Z)V", false)
+
+            c.codegen.gen(resolvedCall.getReceiverExpression()!!).put(it)
+
+            it.invokevirtual("java/lang/reflect/Field", "get", getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE), false)
+
+            it.checkcast(fieldType)
+
+        }
 
     }
 

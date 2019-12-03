@@ -16,6 +16,9 @@ abstract class ZipGenerator : DefaultTask() {
     @get:Input
     val packages: List<String> = listOf(
             "compiler/backend",
+            "compiler/frontend",
+            "compiler/frontend.java",
+            "compiler/util",
             "core/descriptors"
     )
 

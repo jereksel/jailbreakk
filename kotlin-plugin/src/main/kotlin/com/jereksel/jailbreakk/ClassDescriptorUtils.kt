@@ -6,14 +6,10 @@ import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor.Kind.SYNTHESIZE
 import org.jetbrains.kotlin.descriptors.Modality.FINAL
 import org.jetbrains.kotlin.descriptors.Visibilities.PUBLIC
 import org.jetbrains.kotlin.descriptors.annotations.Annotations.Companion.EMPTY
-import org.jetbrains.kotlin.descriptors.impl.PropertyDescriptorImpl
 import org.jetbrains.kotlin.descriptors.impl.PropertyGetterDescriptorImpl
-import org.jetbrains.kotlin.load.java.descriptors.JavaCallableMemberDescriptor
-import org.jetbrains.kotlin.load.java.descriptors.JavaMethodDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.resolve.descriptorUtil.isPublishedApi
 
 fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<CallableDescriptor> {
 
@@ -27,12 +23,12 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
                 val name = FqName("$PACKAGE_PREFIX.${fqNameSafe.asString()}")
 
                 JailbreakkSimpleFunctionDescriptor(
-                        EmptyPackageFragmentDescriptorImpl(moduleDescriptor, name),
-                        EMPTY,
-                        descriptor.name,
-                        SYNTHESIZED,
-                        descriptor.source,
-                        defaultType
+                        containingDeclaration = EmptyPackageFragmentDescriptorImpl(moduleDescriptor, name),
+                        annotations = EMPTY,
+                        name = descriptor.name,
+                        kind = SYNTHESIZED,
+                        source = descriptor.source,
+                        classType = defaultType
                 ).also {
                     it.initialize(
                             thisAsReceiverParameter,
@@ -53,47 +49,42 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
 
                 val name = FqName("$PACKAGE_PREFIX.${fqNameSafe.asString()}")
 
-                PropertyDescriptorImpl
-                        .create(
-                                EmptyPackageFragmentDescriptorImpl(moduleDescriptor, name),
-                                EMPTY,
-                                FINAL,
-                                PUBLIC,
-                                false,
-                                Name.identifier("${descriptor.name}_field"),
-                                SYNTHESIZED,
-                                descriptor.source,
-                                false,
-                                false,
-                                false,
-                                false,
-                                false,
-                                false
-                        ).apply {
+                JailbreakkPropertyDescriptor(
+                        containingDeclaration = EmptyPackageFragmentDescriptorImpl(moduleDescriptor, name),
+                        annotations = EMPTY,
+                        modality = FINAL,
+                        visibility = PUBLIC,
+                        isVar = false,
+                        name = Name.identifier("${descriptor.name}_field"),
+                        kind = SYNTHESIZED,
+                        source = descriptor.source,
+                        originalName = descriptor.name,
+                        originalType = defaultType
+                ).apply {
 
-                            val getter = PropertyGetterDescriptorImpl(
-                                    this,
-                                    EMPTY,
-                                    FINAL,
-                                    visibility,
-                                    false,
-                                    false,
-                                    false,
-                                    SYNTHESIZED,
-                                    null,
-                                    descriptor.source
-                            )
+                    val getter = PropertyGetterDescriptorImpl(
+                            this,
+                            EMPTY,
+                            FINAL,
+                            visibility,
+                            false,
+                            false,
+                            false,
+                            SYNTHESIZED,
+                            null,
+                            descriptor.source
+                    )
 
-                            getter.initialize(descriptor.type)
-                            initialize(getter, null)
-                            setType(
-                                    descriptor.type,
-                                    descriptor.typeParameters,
-                                    null,
-                                    thisAsReceiverParameter
-                            )
+                    getter.initialize(descriptor.type)
+                    initialize(getter, null)
+                    setType(
+                            descriptor.type,
+                            descriptor.typeParameters,
+                            null,
+                            thisAsReceiverParameter
+                    )
 
-                        }
+                }
 
             }
 
