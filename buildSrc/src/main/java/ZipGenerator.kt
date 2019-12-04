@@ -29,13 +29,22 @@ abstract class ZipGenerator : DefaultTask() {
     @TaskAction
     fun download() {
 
+        val asmVersion = "7.0.1"
         val tempDir = Files.createTempDirectory("kotlin-compiler").toFile()
         val tempZip = File(tempDir, "kotlin.zip")
         val unpackedDir = File(tempDir, "unpacked")
         val url = "https://github.com/JetBrains/kotlin/archive/v${version}.zip"
+        val asmAllSources = "https://dl.bintray.com/jetbrains/intellij-third-party-dependencies/org/jetbrains/intellij/deps/asm-all/${asmVersion}/asm-all-${asmVersion}-sources.jar"
+        val asmZip = File(tempDir, "asm.jar")
 
         URL(url).openStream().use { iss ->
             FileOutputStream(tempZip).use { os ->
+                iss.copyTo(os)
+            }
+        }
+
+        URL(asmAllSources).openStream().use { iss ->
+            FileOutputStream(asmZip).use { os ->
                 iss.copyTo(os)
             }
         }
@@ -51,6 +60,8 @@ abstract class ZipGenerator : DefaultTask() {
             }
             null
         }
+
+        ZipUtil.unpack(asmZip, unpackedDir)
 
         ZipUtil.pack(unpackedDir, file)
 

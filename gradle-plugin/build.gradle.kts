@@ -1,8 +1,9 @@
 plugins {
-    id("java-gradle-plugin")
+    `java-gradle-plugin`
+    `maven-publish`
     kotlin("jvm")
     kotlin("kapt")
-    id("org.gradle.maven-publish")
+    id("com.gradle.plugin-publish") version "0.10.1"
 }
 
 gradlePlugin {
@@ -14,6 +15,35 @@ gradlePlugin {
         }
     }
 }
+
+pluginBundle {
+    website = "https://github.com/jereksel/jailbreakk"
+    vcsUrl = "https://github.com/jereksel/jailbreakk"
+    description = "Typesafe reflection for Kotlin"
+    tags = listOf("kotlin")
+
+    (plugins) {
+
+        "jailbreakk" {
+            displayName = "Jailbreakk"
+        }
+
+    }
+}
+
+//pluginBundle {
+//    website = 'http://www.gradle.org/'
+//    vcsUrl = 'https://github.com/gradle/gradle'
+//    description = 'Greetings from here!'
+//    tags = ['greetings', 'salutations']
+//
+//    plugins {
+//        greetingsPlugin {
+//            // id is captured from java-gradle-plugin configuration
+//            displayName = 'Gradle Greeting plugin'
+//        }
+//    }
+//}
 
 dependencies {
     implementation(Deps.kotlinStdLib)

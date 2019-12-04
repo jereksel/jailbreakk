@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt")
     id("com.github.johnrengelman.shadow")
     id("org.gradle.maven-publish")
+    id("com.jfrog.bintray")
 }
 
 apply<KotlinSourcesPlugin>()
@@ -60,12 +61,20 @@ shadowJar.apply {
     }
 }
 
+val sourcesJar by tasks.creating(Jar::class) {
+    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+    classifier = "sources"
+    from(sourceSets["main"].allSource)
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = Build.group
             artifactId = project.name
             version = Build.version
+
+            artifact(sourcesJar)
 
             from(components["java"])
         }

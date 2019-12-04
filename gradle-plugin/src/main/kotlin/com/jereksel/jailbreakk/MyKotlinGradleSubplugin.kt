@@ -37,6 +37,6 @@ class MyKotlinGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = "com.jereksel.jailbreakk",
         artifactId = "kotlin-plugin",
-        version = "0.0.1" // todo find a way to auto define a static field or something like that
+        version = version
     )
 }

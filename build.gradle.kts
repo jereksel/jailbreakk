@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath(Deps.kotlinGradlePlugin)
         classpath(Deps.shadow)
+        classpath(Deps.bintray)
     }
 }
 

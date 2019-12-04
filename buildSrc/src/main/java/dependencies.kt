@@ -17,6 +17,8 @@ object Versions {
     const val kotlinIdeaPlugin = "1.3.61-release-IJ2019.3-1"
 
     const val shadow = "5.2.0"
+
+    const val bintray = "1.8.4"
 }
 
 object Deps {
@@ -37,4 +39,6 @@ object Deps {
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     const val shadow = "com.github.jengelman.gradle.plugins:shadow:${Versions.shadow}"
+
+    const val bintray = "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
 }
