@@ -16,3 +16,7 @@ dependencies {
 
     testImplementation(Deps.kotlinTest)
 }
+
+tasks.publishPlugin {
+    setToken(System.getenv("JETBRAINS_TOKEN"))
+}

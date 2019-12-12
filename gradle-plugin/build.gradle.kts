@@ -3,15 +3,16 @@ plugins {
     `maven-publish`
     kotlin("jvm")
     kotlin("kapt")
-    id("com.gradle.plugin-publish") version "0.10.1"
+    id("com.gradle.plugin-publish")
+    id("com.jfrog.bintray")
 }
 
 gradlePlugin {
     plugins {
         create("jailbreakk") {
-            id = Build.group
+            id = project.group.toString()
+            version = project.version
             implementationClass = "com.jereksel.jailbreakk.MyGradlePlugin"
-            version = Build.version
         }
     }
 }
@@ -31,20 +32,6 @@ pluginBundle {
     }
 }
 
-//pluginBundle {
-//    website = 'http://www.gradle.org/'
-//    vcsUrl = 'https://github.com/gradle/gradle'
-//    description = 'Greetings from here!'
-//    tags = ['greetings', 'salutations']
-//
-//    plugins {
-//        greetingsPlugin {
-//            // id is captured from java-gradle-plugin configuration
-//            displayName = 'Gradle Greeting plugin'
-//        }
-//    }
-//}
-
 dependencies {
     implementation(Deps.kotlinStdLib)
 
@@ -54,13 +41,39 @@ dependencies {
     kapt(Deps.autoService)
 }
 
+val sourcesJar by tasks.creating(Jar::class) {
+    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+    classifier = "sources"
+    from(sourceSets["main"].allSource)
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = Build.group
+            groupId = project.group.toString()
             artifactId = project.name
-            version = Build.version
+            version = project.version.toString()
+
+            artifact(sourcesJar)
+
             from(components["java"])
         }
     }
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    publish = true
+    with(pkg) {
+        repo = "maven"
+        name = "Jailbreakk"
+        publish = true
+        publicDownloadNumbers = true
+        with(version) {
+            name = "${project.version}"
+            vcsTag = "v${project.version}"
+        }
+    }
+    setPublications("maven")
 }

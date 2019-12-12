@@ -1,14 +1,11 @@
-object Build {
-    const val group = "com.jereksel.jailbreakk"
-    const val version = "0.0.1"
-}
-
 object Versions {
     const val autoService = "1.0-rc6"
 
     const val kotlinCompileTesting = "1.2.5"
     const val kotlinTest = "3.4.2"
     const val joor = "0.9.7"
+
+    const val pluginPublish = "0.10.1"
 
     const val intellijIdea = "2019.3"
     const val intellijGradlePlugin = "0.4.14"
@@ -39,6 +36,8 @@ object Deps {
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     const val shadow = "com.github.jengelman.gradle.plugins:shadow:${Versions.shadow}"
+
+    const val pluginPublish = "com.gradle.publish:plugin-publish-plugin:${Versions.pluginPublish}"
 
     const val bintray = "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
 }

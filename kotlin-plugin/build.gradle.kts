@@ -70,13 +70,30 @@ val sourcesJar by tasks.creating(Jar::class) {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = Build.group
+            groupId = project.group.toString()
             artifactId = project.name
-            version = Build.version
+            version = project.version.toString()
 
             artifact(sourcesJar)
 
             from(components["java"])
         }
     }
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    publish = true
+    with(pkg) {
+        repo = "maven"
+        name = "Jailbreakk"
+        publish = true
+        publicDownloadNumbers = true
+        with(version) {
+            name = "${project.version}"
+            vcsTag = "v${project.version}"
+        }
+    }
+    setPublications("maven")
 }

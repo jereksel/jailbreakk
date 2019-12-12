@@ -1,16 +1,18 @@
 <idea-plugin>
     <id>com.jereksel.jailbreakk</id>
     <name>Jailbreakk</name>
-    <version>0.0.1</version>
+    <version>NEXT</version>
     <vendor email="jereksel@gmail.com" url="https://github.com/jereksel/jailbreakk">Andrzej Ressel</vendor>
 
     <description>Companion Intellij plugin for Jailbreakk Kotlin compiler plugin</description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="141"/>
+    <idea-version since-build="193"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
