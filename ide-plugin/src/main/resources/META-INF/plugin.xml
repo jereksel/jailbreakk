@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.jereksel.jailbreakk</id>
     <name>Jailbreakk</name>
-    <version>NEXT</version>
+    <version>0.0.1</version>
     <vendor email="jereksel@gmail.com" url="https://github.com/jereksel/jailbreakk">Andrzej Ressel</vendor>
 
     <description>Companion Intellij plugin for Jailbreakk Kotlin compiler plugin</description>
