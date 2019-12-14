@@ -44,6 +44,8 @@ tasks.register("releaseVersion") {
         val version = project.property("release.version")?.toString()
                 ?: throw RuntimeException("Property 'release.version' is null")
 
+        logger.lifecycle("Changing version to '$version'")
+
         changes.forEach {
             val file = file(it.file)
             file.writeText(file.readText().replace(Regex(it.pattern), it.replacement(version)))
