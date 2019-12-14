@@ -14,11 +14,23 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Build with Gradle
-      run: ./gradlew build
+#    - name: Build with Gradle
+#      run: ./gradlew build
+#
+#    - name: Release locally
+#      run: ./gradlew publishToMavenLocal
+#
+#    - name: Run integration tests
+#      run: cd integration-tests && ./gradlew test
 
-    - name: Release locally
-      run: ./gradlew publishToMavenLocal
-
-    - name: Run integration tests
-      run: cd integration-tests && ./gradlew test
+    - name: Release NEXT snapshot
+      if: github.ref == 'refs/heads/release-next'
+      run: |
+        ./gradlew releaseVersion -Prelease.version="$(echo $SHA | head -c7)"
+        ./gradlew publishPlugin
+      env:
+        BINTRAY_USER: "jereksel"
+        BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+        JETBRAINS_TOKEN: ${{ secrets.JETBRAINS_TOKEN }}
+        SHA: ${{ github.sha }}
+        SNAPSHOT: true
