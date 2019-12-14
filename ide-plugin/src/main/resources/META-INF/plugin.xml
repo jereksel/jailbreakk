@@ -16,9 +16,9 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
-        <kotlinIndicesHelperExtension implementation="com.jereksel.jailbreakk.KotlinIndicesHelperExtensionAdapter" />
-        <packageFragmentProviderExtension implementation="com.jereksel.jailbreakk.MyPackageFragmentProviderExtension" />
-        <expressionCodegenExtension implementation="com.jereksel.jailbreakk.MyExpressionCodegenExtension" />
+        <kotlinIndicesHelperExtension implementation="com.jereksel.jailbreakk.JailBreakkKotlinIndicesHelperExtensionAdapter" />
+        <packageFragmentProviderExtension implementation="com.jereksel.jailbreakk.JailbreakkIDEPackageFragmentProviderExtension" />
+        <expressionCodegenExtension implementation="com.jereksel.jailbreakk.JailbreakkExpressionCodegenExtension" />
     </extensions>
 
 </idea-plugin>

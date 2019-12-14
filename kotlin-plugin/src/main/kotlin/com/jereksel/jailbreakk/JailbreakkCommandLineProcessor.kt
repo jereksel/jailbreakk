@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.CompilerConfigurationKey
 
 @AutoService(CommandLineProcessor::class)
-class MyCommandLineProcessor : CommandLineProcessor {
+class JailbreakkCommandLineProcessor : CommandLineProcessor {
     /**
      * Just needs to be consistent with the key for DebugLogGradleSubplugin#getCompilerPluginId
      */

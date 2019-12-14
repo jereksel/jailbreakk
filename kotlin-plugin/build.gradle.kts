@@ -81,6 +81,15 @@ publishing {
     }
 }
 
+tasks.jar {
+    manifest {
+        attributes(
+                "Implementation-Title" to "jailbreakk-kotlin-plugin",
+                "Implementation-Version" to project.version
+        )
+    }
+}
+
 bintray {
     user = System.getenv("BINTRAY_USER")
     key = System.getenv("BINTRAY_KEY")
