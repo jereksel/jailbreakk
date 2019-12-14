@@ -3,10 +3,16 @@ plugins {
     id("org.jetbrains.intellij") version Versions.intellijGradlePlugin
 }
 
+file("${project.buildDir}/intellij/cache").mkdirs()
+
 intellij {
     updateSinceUntilBuild = false
     version = Versions.intellijIdea
     setPlugins("java", Deps.kotlinIdeaPlugin)
+
+    localSourcesPath = "${project.buildDir}/intellij/sources"
+    sandboxDirectory = "${project.buildDir}/intellij/sandbox"
+    ideaDependencyCachePath = "${project.buildDir}/intellij/cache"
 }
 
 dependencies {

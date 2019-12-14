@@ -14,6 +14,14 @@ jobs:
       with:
         java-version: 1.8
 
+    - name: Cache Gradle
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}-${{ hashFiles('buildSrc/**/*.kt') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
     - name: Build with Gradle
       run: ./gradlew build --scan -s
 
