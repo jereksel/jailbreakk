@@ -32,5 +32,5 @@ jobs:
         BINTRAY_USER: "jereksel"
         BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
         JETBRAINS_TOKEN: ${{ secrets.JETBRAINS_TOKEN }}
-        SHA: ${{ env.GITHUB_SHA }}
+        SHA: ${{ github.sha }}
         SNAPSHOT: true
