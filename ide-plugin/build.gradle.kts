@@ -17,6 +17,11 @@ dependencies {
     testImplementation(Deps.kotlinTest)
 }
 
+val snapshot = System.getenv("SNAPSHOT") == "true"
+
 tasks.publishPlugin {
     setToken(System.getenv("JETBRAINS_TOKEN"))
+    if (snapshot) {
+        channels("next")
+    }
 }
