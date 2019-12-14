@@ -25,7 +25,7 @@ jobs:
 
     - name: Release NEXT snapshot
       if: github.ref == 'refs/heads/release-next'
-      run:
+      run: |
         ./gradlew releaseVersion -Prelease.version="$(echo $SHA | head -c7)"
         ./gradlew publishPlugin
       env:
