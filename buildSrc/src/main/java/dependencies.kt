@@ -3,12 +3,12 @@ object Versions {
 
     const val kotlinCompileTesting = "1.2.5"
     const val kotlinTest = "3.4.2"
-    const val joor = "0.9.7"
+    const val joor = "0.9.12"
 
     const val pluginPublish = "0.10.1"
 
     const val intellijIdea = "2019.3"
-    const val intellijGradlePlugin = "0.4.14"
+    const val intellijGradlePlugin = "0.4.15"
 
     const val kotlin = "1.3.61"
     const val kotlinIdeaPlugin = "1.3.61-release-IJ2019.3-1"
