@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.intellij") version Versions.intellijGradlePlugin
 }
 
+file("${project.buildDir}/intellij/cache").mkdirs()
+
 intellij {
     updateSinceUntilBuild = false
     version = Versions.intellijIdea
