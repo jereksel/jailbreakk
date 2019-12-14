@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.resolve.scopes.MemberScopeImpl
 import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.utils.Printer
 
-class MyPackageFragmentProviderExtension : PackageFragmentProviderExtension {
+open class JailbreakkPackageFragmentProviderExtension : PackageFragmentProviderExtension {
 
     override fun getPackageFragmentProvider(
             project: Project,

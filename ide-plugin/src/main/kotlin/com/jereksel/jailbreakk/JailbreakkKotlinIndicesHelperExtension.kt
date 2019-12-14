@@ -1,16 +1,13 @@
 package com.jereksel.jailbreakk
 
-import com.jereksel.jailbreakk.Const.PACKAGE_PREFIX
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.descriptors.annotations.Annotations
-import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl
-import org.jetbrains.kotlin.load.java.descriptors.JavaCallableMemberDescriptor
-import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.descriptors.ModuleDescriptor
+import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.representativeUpperBound
 
-class MyKotlinIndicesHelperExtension {
+class JailbreakkKotlinIndicesHelperExtension {
 
     fun appendExtensionCallables(
             consumer: MutableList<in CallableDescriptor>,

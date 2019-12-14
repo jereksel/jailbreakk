@@ -15,7 +15,7 @@ abstract class AbstractCompilerTest : StringSpec() {
             sources = source.toList()
 
             // pass your own instance of a compiler plugin
-            compilerPlugins = listOf(MyComponentRegistrar())
+            compilerPlugins = listOf(JailbreakkComponentRegistrar())
 
             inheritClassPath = true
             messageOutputStream = System.out // see diagnostics in real time

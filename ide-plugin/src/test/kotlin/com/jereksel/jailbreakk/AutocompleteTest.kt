@@ -15,6 +15,7 @@ class AutocompleteTest : LightJavaCodeInsightFixtureTestCase() {
 
     override fun setUp() {
         super.setUp()
+        forceTrue = true
 //    val jar = classpathFromClassloader(this::class.java.classLoader)!!.single { it.absolutePath.contains("arrow-optics") }
 //    PsiTestUtil.addLibrary(myFixture.getProjectDisposable(), myFixture.getModule(), "HibernateJPA", jar.absolutePath);
     }

@@ -16,7 +16,7 @@ import org.jetbrains.org.objectweb.asm.Type.*
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 import java.lang.reflect.Field
 
-class MyExpressionCodegenExtension : ExpressionCodegenExtension {
+class JailbreakkExpressionCodegenExtension : ExpressionCodegenExtension {
 
     companion object {
 
