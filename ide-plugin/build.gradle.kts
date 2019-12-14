@@ -7,6 +7,9 @@ intellij {
     updateSinceUntilBuild = false
     version = Versions.intellijIdea
     setPlugins("java", Deps.kotlinIdeaPlugin)
+
+    localSourcesPath = "${project.buildDir}/intellij/sources"
+    sandboxDirectory = "${project.buildDir}/intellij/sandbox"
 }
 
 dependencies {
