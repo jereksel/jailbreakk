@@ -10,6 +10,7 @@ intellij {
 
     localSourcesPath = "${project.buildDir}/intellij/sources"
     sandboxDirectory = "${project.buildDir}/intellij/sandbox"
+    ideaDependencyCachePath = "${project.buildDir}/intellij/cache"
 }
 
 dependencies {
