@@ -11,6 +11,9 @@ buildscript {
         classpath(Deps.pluginPublish)
     }
 }
+plugins {
+    id("com.github.ben-manes.versions") version "0.27.0"
+}
 
 data class FileUpdate(
         val file: String,
