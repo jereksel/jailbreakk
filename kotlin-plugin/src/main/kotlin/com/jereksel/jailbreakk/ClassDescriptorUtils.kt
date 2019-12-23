@@ -79,7 +79,7 @@ fun ClassDescriptor.getDescriptors(moduleDescriptor: ModuleDescriptor): List<Cal
                     initialize(getter, null)
                     setType(
                             descriptor.type,
-                            descriptor.typeParameters,
+                            declaredTypeParameters + descriptor.typeParameters,
                             null,
                             thisAsReceiverParameter
                     )

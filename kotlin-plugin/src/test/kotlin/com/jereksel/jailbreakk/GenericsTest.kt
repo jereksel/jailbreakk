@@ -27,6 +27,27 @@ class GenericsTest : AbstractCompilerTest() {
 
         }
 
+        "Private field in generic class" {
+
+            val kotlinSource = SourceFile.kotlin("Main.kt", """
+                
+                import jb.SecretClass.secret_field
+                
+                class SecretClass<T> {
+                    private val secret = "OK"
+                }
+                
+                fun test(): String {
+                    val secret = SecretClass<Int>()
+                    return secret.secret_field
+                }
+        
+            """)
+
+            testCompilation(kotlinSource)
+
+        }
+
         "Method returning type parameter" {
 
             val kotlinSource = SourceFile.kotlin("Main.kt", """
