@@ -21,4 +21,4 @@ jobs:
       run: ./gradlew publishToMavenLocal
 
     - name: Run integration tests
-      run: cd integration-tests && ./gradlew test
+      run: cd integration-tests && ./gradlew build
